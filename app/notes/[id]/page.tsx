@@ -7,12 +7,14 @@ interface NoteDetailsProps {
 }
 
 export default async function NoteDetails({ params }: NoteDetailsProps) {
-  const { id } = await params;
+  const { id: idStr } = await params;
+  const id = parseInt(idStr); // ← перетворення одразу
+
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ['note', id],
-    queryFn: () => fetchNoteById(parseInt(id)),
+    queryKey: ['note', id], // ← використовуємо число
+    queryFn: () => fetchNoteById(id),
   });
 
   return (
